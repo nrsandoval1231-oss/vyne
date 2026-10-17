@@ -13,10 +13,9 @@ import {
   c,
 } from "../src/components/ui";
 import { useLibrary } from "../src/state/LibraryProvider";
-import { initialState } from "../src/data/demo";
 import { nativeIntegration } from "../../../modules/photo-intelligence/src";
 export default function Settings() {
-  const { state, update, busy } = useLibrary();
+  const { state, update, reset, busy } = useLibrary();
   const [confirming, setConfirming] = useState(false);
   return (
     <Screen
@@ -81,8 +80,8 @@ export default function Settings() {
       <Section title="Local data controls">
         <Body>
           Reset restores the sample library and removes all local review
-          history, custom albums, corrections, preferences, and settings. Your
-          real photos are unaffected.
+          history, custom albums, corrections, preferences, settings, and
+          retained recovery archives. Your real photos are unaffected.
         </Body>
         {confirming ? (
           <Card>
@@ -93,7 +92,7 @@ export default function Settings() {
               title="Confirm reset demo data"
               disabled={busy}
               onPress={() => {
-                void update(() => initialState());
+                void reset();
                 setConfirming(false);
               }}
             />

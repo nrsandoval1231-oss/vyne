@@ -10,7 +10,7 @@ Environment: Linux x86_64, Node 24.19.0, npm 11.9.0. No Xcode, `xcrun`, iOS Simu
 | `npx expo install --check` | Pass: SDK 58 dependency versions compatible |
 | `npm run typecheck` | Pass: strict TypeScript |
 | `npm run lint` | Pass |
-| `npm test` | 10 passing domain/SQLite tests |
+| `npm test` | 22 passing domain/SQLite tests (including snapshot recovery regressions) |
 | `npx expo export --platform ios` | Pass: Hermes JS bundle and bundled assets; **not a native build** |
 | `npx expo export --platform web` | Pass: JS/WASM/assets |
 | `npx expo prebuild --platform ios --no-install` | Pass: generated native project configuration; CocoaPods/Xcode compilation not run |
@@ -104,6 +104,26 @@ Additional captures: [Photo](screenshots/photo-web.png), [Learning](screenshots/
 
 - Recommendations, classification, metadata and size estimates are fixtures. Similar burst entries reuse a bundled preview. No actual image scanning, feature extraction, trained model, live ingestion, Photos sync or deletion.
 - Local preference counts are simple explainable hints, not evidence of measured recommendation accuracy.
-- The snapshot persistence model is deliberately small; normalize and paginate the real library index in M2. Startup errors preserve saved data and show a retry/restart message rather than silently discarding it.
+- The snapshot persistence model is deliberately small; normalize and paginate the real library index in M2. Unreadable snapshots open an in-app recovery screen. Retry is nondestructive; confirmed repair retains valid v1 entries, while unknown versions require an explicit fresh-library choice. Both paths archive the exact original payload atomically before replacement. Storage I/O errors offer retry rather than deleting the database.
 - Native performance, VoiceOver, Dynamic Type extremes, iOS background behavior and actual SQLite persistence across native lifecycle events remain device gates.
 - Brand name and provisional icon retain the canonical legal/availability-review status.
+
+
+## PR #1 P2 follow-up: unreadable snapshot recovery
+
+The loading-screen trap is replaced by an independent recovery screen that does not require library context or Settings access. It distinguishes unreadable JSON, invalid nested v1 data, unsupported versions, and storage access failures. No recovery writes happen on Retry or Cancel. A compatible app update is recommended for unsupported schemas; unknown versions are never interpreted as v1.
+
+For v1 data, explicit **Recover readable data** retains valid review records, custom albums, memberships, correction history, settings and preference controls. Invalid records are omitted, missing assignments are left unassigned, and required demo albums are restored. Damaged learning controls conservatively pause learning. Before either repair or a fresh start, the complete original string is inserted into the local `snapshot_recovery` table in the same SQLite transaction as replacement of `local_state`. A stale-snapshot check prevents overwriting a newer row. Failed archive, replacement or commit operations roll back. The archive is not uploaded or logged; no archive import/export UI is claimed. Settings → Reset demonstration data explicitly clears archives and current demo state together.
+
+Regression coverage now includes malformed JSON, null/array roots, future versions, deep nested corruption, missing fields, duplicate IDs, preserved valid data, transaction failures, stale recovery, failed reset, and close/reopen of file-backed SQLite databases. The separate browser recovery suite seeds actual Expo SQLite in an isolated browser context, checks Retry and Cancel do not mutate data, confirms fresh/partial recovery, reloads the app, verifies preserved history/albums/settings and exact archived payloads, and checks archive removal after Settings reset.
+
+```sh
+# With Metro already running on port 8081, from apps/ios:
+npm run test:recovery:browser
+```
+
+`scripts/recovery-fixture.ts` is a test-only Metro entry loaded in a separate fixture page while the app is closed. It is not imported by any app route or production bundle and introduces no runtime recovery backdoor. Both browser suites use isolated contexts and demonstration data only.
+
+[Actual recovery screen capture — Chromium, not iPhone](screenshots/recovery-web.png).
+
+Dependency audit re-run for this follow-up: **26 transitive findings remain (19 high, 7 moderate)** with advisory roots `braces`, `node-forge`, and `uuid`. No dependencies were added for recovery. Expo Doctor again passes 18/20 checks; the same two online checks remain network-blocked. **Native iPhone recovery, native SQLite lifecycle/transaction behavior, VoiceOver and native performance remain unverified in this Linux environment.** Repeat the recovery scenarios on an iOS development build before device acceptance; do not seed or reset a personal Photos library.

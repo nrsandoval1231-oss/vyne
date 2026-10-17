@@ -16,10 +16,10 @@ vyne/
 │   │   └── credits.tsx
 │   ├── src/components/ui.tsx    # shared brand/UI/motion primitives
 │   ├── src/data/                # deterministic records and static asset map
-│   ├── src/services/            # versioned SQLite persistence
+│   ├── src/services/            # snapshot validation, SQLite and atomic recovery
 │   ├── src/state/               # serialized local state provider
 │   ├── assets/demo/             # bundled photos, artwork and provenance
-│   ├── scripts/smoke.cjs        # browser interaction verification
+│   ├── scripts/                 # normal and recovery browser verification
 │   ├── app.json
 │   ├── metro.config.js
 │   └── package-lock.json
@@ -30,7 +30,7 @@ vyne/
 ├── modules/photo-intelligence/
 │   ├── src/index.ts             # future native adapter interface
 │   └── ios/                     # Swift design contract, not a working module
-├── tests/domain.test.ts
+├── tests/                       # domain and SQLite recovery regressions
 └── docs/
     ├── PRD.md
     ├── BRAND.md

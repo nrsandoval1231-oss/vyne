@@ -3,7 +3,7 @@
 **Your life in focus.** A privacy-first intelligent iPhone photo curator.
 
 ## Current status
-M1 application foundation is implemented in Expo / React Native with clearly labeled, bundled demonstration photos. All seven product screens are accessible. Local SQLite persists cleanup intentions, review history, many-to-many album assignments, user collections, settings and deterministic preference signals.
+M1 application foundation is implemented in Expo / React Native with clearly labeled, bundled demonstration photos. All seven product screens are accessible. Local SQLite persists cleanup intentions, review history, many-to-many album assignments, user collections, settings and deterministic preference signals. An in-app startup recovery screen can retain readable entries from damaged snapshots or start fresh after confirmation, preserving the original payload locally before replacement.
 
 **No real photo scanning, AI inference, Apple Photos synchronization or deletion is implemented.** M1 has no backend, accounts or photo uploads. Native iPhone execution remains to be verified on a Mac/device; Linux bundle and browser verification do not substitute for that gate.
 

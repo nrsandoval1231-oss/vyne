@@ -40,7 +40,8 @@
     "lint": "expo lint",
     "test": "tsx --test ../../tests/*.test.ts",
     "test:browser": "node scripts/smoke.cjs",
-    "format:check": "prettier --check app src ../../packages ../../tests"
+    "format:check": "prettier --check app src ../../packages ../../tests",
+    "test:recovery:browser": "node scripts/recovery-smoke.cjs"
   },
   "private": true,
   "engines": {
