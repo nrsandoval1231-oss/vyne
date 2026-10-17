@@ -1,0 +1,10 @@
+{
+  "name": "vyne",
+  "private": true,
+  "scripts": {
+    "start": "npm --prefix apps/ios start",
+    "typecheck": "npm --prefix apps/ios run typecheck",
+    "lint": "npm --prefix apps/ios run lint",
+    "test": "npm --prefix apps/ios test"
+  }
+}

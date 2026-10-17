@@ -1,20 +1,45 @@
-# Folder Tree
+# Repository structure
+
 ```text
 vyne/
 ├── README.md
-├── .gitignore
-├── docs/
-│   ├── PRD.md
-│   ├── BRAND.md
-│   ├── UI-UX.md
-│   ├── ARCHITECTURE.md
-│   ├── ROADMAP.md
-│   └── STRUCTURE.md
-├── apps/ios/README.md
+├── package.json                 # root command shortcuts
+├── apps/ios/
+│   ├── app/                     # Expo Router routes
+│   │   ├── (tabs)/              # Home, Cleanup, Albums
+│   │   ├── album/[id].tsx
+│   │   ├── photo/[id].tsx
+│   │   ├── viewer/[id].tsx
+│   │   ├── learning.tsx
+│   │   ├── storage.tsx
+│   │   ├── settings.tsx
+│   │   └── credits.tsx
+│   ├── src/components/ui.tsx    # shared brand/UI/motion primitives
+│   ├── src/data/                # deterministic records and static asset map
+│   ├── src/services/            # snapshot validation, SQLite and atomic recovery
+│   ├── src/state/               # serialized local state provider
+│   ├── assets/demo/             # bundled photos, artwork and provenance
+│   ├── scripts/                 # normal and recovery browser verification
+│   ├── app.json
+│   ├── metro.config.js
+│   └── package-lock.json
 ├── packages/
 │   ├── design-tokens/src/index.ts
 │   ├── domain/src/index.ts
-│   └── intelligence/README.md
-└── modules/photo-intelligence/ios/README.md
+│   └── intelligence/src/index.ts
+├── modules/photo-intelligence/
+│   ├── src/index.ts             # future native adapter interface
+│   └── ios/                     # Swift design contract, not a working module
+├── tests/                       # domain and SQLite recovery regressions
+└── docs/
+    ├── PRD.md
+    ├── BRAND.md
+    ├── UI-UX.md
+    ├── ARCHITECTURE.md
+    ├── ROADMAP.md
+    ├── STRUCTURE.md
+    ├── TESTING.md
+    └── screenshots/             # actual browser preview captures
 ```
-Directories exist once files are committed. The Expo app and Swift module are intentionally not claimed as scaffolded or runnable yet.
+
+Generated native `ios/`, build output and local database files are not committed. Generate the native development project with Expo on a Mac. No production PhotoKit module is claimed.

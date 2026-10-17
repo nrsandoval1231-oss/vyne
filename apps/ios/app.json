@@ -1,0 +1,23 @@
+{
+  "expo": {
+    "name": "VYNE",
+    "slug": "vyne",
+    "scheme": "vyne",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "platforms": ["ios", "web"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.vyne.app"
+    },
+    "plugins": ["expo-router", "expo-sqlite", "expo-image"],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "icon": "./assets/icon.png"
+  }
+}

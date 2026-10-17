@@ -14,3 +14,9 @@ coverage/
 *.sqlite
 *.db
 private-photos/
+
+# Generated native development projects
+apps/ios/ios/
+apps/ios/android/
+playwright-report/
+test-results/
